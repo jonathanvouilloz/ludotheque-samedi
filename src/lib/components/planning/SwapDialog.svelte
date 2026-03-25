@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { fetchJson } from '$lib/utils/api';
 	import { formatSamedi, today } from '$lib/utils/dates';
 	import MemberPill from './MemberPill.svelte';
@@ -44,6 +45,12 @@
 	let errorMsg = $state('');
 
 	let todayStr = today();
+
+	// Lock body scroll while modal is open
+	onMount(() => {
+		document.body.classList.add('modal-open');
+		return () => document.body.classList.remove('modal-open');
+	});
 
 	// Non-permanent members on the from slot (for admin mode)
 	let fromSlotMembers = $derived(
@@ -163,14 +170,14 @@
 <!-- Backdrop -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	class="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center"
+	class="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto overscroll-contain bg-black/40 sm:items-center"
 	onkeydown={(e) => e.key === 'Escape' && onclose()}
 	onclick={(e) => { if (e.target === e.currentTarget) onclose(); }}
 >
 	<!-- Dialog -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
-		class="w-full max-w-md rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl"
+		class="w-full max-w-md max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl"
 		onclick={(e) => e.stopPropagation()}
 	>
 		<!-- Header -->

@@ -4,6 +4,9 @@
 	body {
 		letter-spacing: -0.01em;
 	}
+	body.modal-open {
+		overflow: hidden;
+	}
 }
 
 @theme {
