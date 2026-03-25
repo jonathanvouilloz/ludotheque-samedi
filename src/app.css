@@ -4,8 +4,33 @@
 	body {
 		letter-spacing: -0.01em;
 	}
-	body.modal-open {
-		overflow: hidden;
+
+	dialog.modal {
+		padding: 0;
+		border: none;
+		width: 100%;
+		max-width: 28rem;
+		max-height: 90dvh;
+		overflow-y: auto;
+		background: white;
+		border-radius: 1rem;
+		box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+	}
+
+	dialog.modal::backdrop {
+		background: rgba(0, 0, 0, 0.4);
+	}
+
+	dialog.modal-sm {
+		max-width: 24rem;
+	}
+
+	@media (max-width: 639px) {
+		dialog.modal {
+			margin: auto auto 0;
+			border-radius: 1rem 1rem 0 0;
+			max-height: 85dvh;
+		}
 	}
 }
 

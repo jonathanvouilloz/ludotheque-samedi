@@ -23,6 +23,7 @@
 		onupdated: () => void;
 	} = $props();
 
+	let dialogEl: HTMLDialogElement;
 	let isClosed = $state(slot.isClosed);
 	let eventLabel = $state(slot.eventLabel ?? '');
 	let loading = $state(false);
@@ -30,10 +31,15 @@
 
 	const PRESETS = ['', 'Vacances', 'Fermé', 'Fermeture été'];
 
-	// Lock body scroll while modal is open
 	onMount(() => {
-		document.body.classList.add('modal-open');
-		return () => document.body.classList.remove('modal-open');
+		dialogEl.showModal();
+		dialogEl.addEventListener('click', (e) => {
+			if (e.target === dialogEl) onclose();
+		});
+		dialogEl.addEventListener('cancel', (e) => {
+			e.preventDefault();
+			onclose();
+		});
 	});
 
 	async function save(): Promise<void> {
@@ -58,19 +64,8 @@
 	}
 </script>
 
-<!-- Backdrop -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div
-	class="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto overscroll-contain bg-black/40 sm:items-center"
-	onkeydown={(e) => e.key === 'Escape' && onclose()}
-	onclick={(e) => { if (e.target === e.currentTarget) onclose(); }}
->
-	<!-- Dialog -->
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div
-		class="w-full max-w-sm max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl"
-		onclick={(e) => e.stopPropagation()}
-	>
+<dialog bind:this={dialogEl} class="modal modal-sm">
+	<div class="p-5">
 		<!-- Header -->
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
@@ -151,4 +146,4 @@
 			</button>
 		</div>
 	</div>
-</div>
+</dialog>

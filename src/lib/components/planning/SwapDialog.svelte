@@ -38,6 +38,7 @@
 		onswapped: () => void;
 	} = $props();
 
+	let dialogEl: HTMLDialogElement;
 	let fromMemberId = $state<string | null>(null);
 	let selectedSlot = $state<Slot | null>(null);
 	let selectedMemberId = $state<string | null>(null);
@@ -46,10 +47,17 @@
 
 	let todayStr = today();
 
-	// Lock body scroll while modal is open
 	onMount(() => {
-		document.body.classList.add('modal-open');
-		return () => document.body.classList.remove('modal-open');
+		dialogEl.showModal();
+		// Close on backdrop click
+		dialogEl.addEventListener('click', (e) => {
+			if (e.target === dialogEl) onclose();
+		});
+		// Close on cancel (Escape)
+		dialogEl.addEventListener('cancel', (e) => {
+			e.preventDefault();
+			onclose();
+		});
 	});
 
 	// Non-permanent members on the from slot (for admin mode)
@@ -57,17 +65,14 @@
 		fromSlot.assignments.filter((a) => !a.member.isPermanent)
 	);
 
-	// Admin needs to pick from member first; auto-select if only one
 	let needsFromMemberSelection = $derived(
 		isResponsable && fromSlotMembers.length > 1 && !fromMemberId
 	);
 
-	// Effective "from" member for filtering
 	let effectiveFromMemberId = $derived(
 		isResponsable ? fromMemberId : currentUserId
 	);
 
-	// Auto-select from member if only one option (admin mode)
 	$effect(() => {
 		if (isResponsable && fromSlotMembers.length === 1) {
 			fromMemberId = fromSlotMembers[0].member.id;
@@ -78,28 +83,24 @@
 		fromSlotMembers.find((a) => a.member.id === effectiveFromMemberId)?.member.name ?? ''
 	);
 
-	// Eligible target slots: future, open, not the same slot
 	let eligibleSlots = $derived(
 		allSlots.filter(
 			(s) =>
 				s.id !== fromSlot.id &&
 				!s.isClosed &&
 				s.date >= todayStr &&
-				// Has at least one non-permanent member that isn't the from member
 				s.assignments.some(
 					(a) => a.member.id !== effectiveFromMemberId && !a.member.isPermanent
 				)
 		)
 	);
 
-	// Swappable members on selected slot (non-permanent, not the from member)
 	let swappableMembers = $derived(
 		selectedSlot?.assignments.filter(
 			(a) => a.member.id !== effectiveFromMemberId && !a.member.isPermanent
 		) ?? []
 	);
 
-	// Warning if different required count
 	let hasDifferentCount = $derived(
 		selectedSlot != null &&
 			fromSlot.requiredCount != null &&
@@ -118,7 +119,6 @@
 
 	function selectSlot(slot: Slot): void {
 		selectedSlot = slot;
-		// Auto-select if only one swappable member
 		const swappable = slot.assignments.filter(
 			(a) => a.member.id !== effectiveFromMemberId && !a.member.isPermanent
 		);
@@ -147,7 +147,6 @@
 			toMemberId: selectedMemberId
 		};
 
-		// Admin swap: send fromMemberId so the server knows who to swap
 		if (isResponsable && effectiveFromMemberId !== currentUserId) {
 			payload.fromMemberId = effectiveFromMemberId;
 		}
@@ -167,19 +166,8 @@
 	}
 </script>
 
-<!-- Backdrop -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div
-	class="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto overscroll-contain bg-black/40 sm:items-center"
-	onkeydown={(e) => e.key === 'Escape' && onclose()}
-	onclick={(e) => { if (e.target === e.currentTarget) onclose(); }}
->
-	<!-- Dialog -->
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div
-		class="w-full max-w-md max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl"
-		onclick={(e) => e.stopPropagation()}
-	>
+<dialog bind:this={dialogEl} class="modal">
+	<div class="p-5">
 		<!-- Header -->
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
@@ -202,7 +190,6 @@
 		</div>
 
 		{#if needsFromMemberSelection}
-			<!-- Phase 0 (admin): Select which member to swap -->
 			<p class="mt-4 text-sm text-gray-500">Quel membre échanger ?</p>
 			<div class="mt-2 space-y-1">
 				{#each fromSlotMembers as a}
@@ -215,7 +202,6 @@
 				{/each}
 			</div>
 		{:else if !selectedSlot}
-			<!-- Phase 1: Select target slot -->
 			<p class="mt-4 text-sm text-gray-500">
 				{isResponsable ? 'Avec quel samedi échanger ?' : 'Avec quel samedi veux-tu échanger ?'}
 			</p>
@@ -225,7 +211,7 @@
 					Aucun samedi disponible pour un échange.
 				</p>
 			{:else}
-				<div class="mt-2 max-h-[40vh] space-y-1 overflow-y-auto">
+				<div class="mt-2 space-y-1">
 					{#each eligibleSlots as slot}
 						<button
 							onclick={() => selectSlot(slot)}
@@ -253,7 +239,6 @@
 				</button>
 			{/if}
 		{:else}
-			<!-- Phase 2: Select member + confirm -->
 			<div class="mt-4">
 				<p class="text-sm text-gray-500">
 					Samedi cible :
@@ -314,4 +299,4 @@
 			</div>
 		{/if}
 	</div>
-</div>
+</dialog>
