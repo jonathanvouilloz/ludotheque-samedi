@@ -78,8 +78,8 @@
 <div
 	class="border-b border-gray-100 px-3 py-2.5 transition-colors
 		{isClosedOrEvent && !isPast ? 'bg-amber-50/60' : ''}
-		{isNext && !isClosedOrEvent ? 'border-l-4 border-l-royal bg-royal-50' : ''}
-		{isMySlot && !isPast && !isNext && !isClosedOrEvent ? 'border-l-4 border-l-royal bg-royal-50' : ''}
+		{isNext && !isClosedOrEvent ? 'border-l-4 border-l-royal bg-royal-100' : ''}
+		{isMySlot && !isPast && !isNext && !isClosedOrEvent ? 'border-l-4 border-l-royal bg-royal-100' : ''}
 		{!isMySlot && !isNext && !isClosedOrEvent ? 'border-l-4 border-l-transparent' : ''}
 		{isPast ? 'text-gray-400' : ''}"
 >
@@ -101,7 +101,7 @@
 			{#if canSwap}
 				<button
 					onclick={onswap}
-					class="flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-royal transition-colors hover:bg-royal-50"
+					class="flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-royal transition-colors hover:bg-royal-100"
 					title="Échanger ce samedi"
 				>
 					<ArrowLeftRight size={14} />
