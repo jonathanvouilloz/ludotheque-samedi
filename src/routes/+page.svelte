@@ -32,8 +32,13 @@
 		return slots.filter((s) => s.assignments.some((a: { member: { id: string } }) => a.member.id === selectedMemberId));
 	});
 
-	// Next slot (from unfiltered slots for hero card)
-	let nextSlot = $derived(slots.find((s) => s.date >= todayStr && !s.isClosed) ?? null);
+	// Next slot where the current user is assigned
+	let nextSlot = $derived(
+		slots.find((s) =>
+			s.date >= todayStr && !s.isClosed &&
+			s.assignments.some((a: { member: { id: string } }) => a.member.id === identity.memberId)
+		) ?? null
+	);
 
 	// Split filtered slots into past and current/future
 	let pastSlots = $derived(filteredSlots.filter((s) => s.date < todayStr));
@@ -197,7 +202,7 @@
 		{@const days = daysUntil(nextSlot.date)}
 		<div class="mt-4 rounded-xl bg-royal px-4 py-3">
 			<div class="flex items-baseline justify-between">
-				<span class="text-base text-white/70">Prochain créneau</span>
+				<span class="text-base text-white/70">Mon prochain samedi</span>
 				<span class="text-sm text-white/70">
 					{#if days === 0}
 						aujourd'hui

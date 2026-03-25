@@ -10,6 +10,9 @@
 	import ScrollText from 'lucide-svelte/icons/scroll-text';
 	import Settings from 'lucide-svelte/icons/settings';
 	import LogOut from 'lucide-svelte/icons/log-out';
+	import Download from 'lucide-svelte/icons/download';
+	import Share from 'lucide-svelte/icons/share';
+	import X from 'lucide-svelte/icons/x';
 	import '../app.css';
 
 	let { children } = $props();
@@ -25,12 +28,37 @@
 	let isOnIdentifyPage = $derived($page.url.pathname === '/identify');
 	let showNav = $derived(!isOnIdentifyPage);
 
+	// PWA install prompt
+	let installPromptEvent = $state<Event | null>(null);
+	let showInstallBanner = $state(false);
+	let isIOS = $state(false);
+
 	onMount(async () => {
 		identity.init();
 
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
 			registerSW({ immediate: true });
+		}
+
+		// Install banner logic
+		const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+		const dismissed = localStorage.getItem('ludotools_install_dismissed');
+
+		if (!isStandalone && !dismissed) {
+			// iOS detection
+			const ua = navigator.userAgent;
+			isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+			if (isIOS) {
+				showInstallBanner = true;
+			}
+
+			window.addEventListener('beforeinstallprompt', (e) => {
+				e.preventDefault();
+				installPromptEvent = e;
+				showInstallBanner = true;
+			});
 		}
 
 		checkNewLogs();
@@ -89,6 +117,21 @@
 			newLogCount = 0;
 		}
 	});
+
+	async function installApp(): Promise<void> {
+		if (!installPromptEvent) return;
+		(installPromptEvent as any).prompt();
+		const result = await (installPromptEvent as any).userChoice;
+		if (result.outcome === 'accepted') {
+			showInstallBanner = false;
+		}
+		installPromptEvent = null;
+	}
+
+	function dismissInstall(): void {
+		showInstallBanner = false;
+		localStorage.setItem('ludotools_install_dismissed', '1');
+	}
 
 	function changeUser(): void {
 		identity.clear();
@@ -177,6 +220,42 @@
 				{@render children()}
 			</div>
 		</main>
+
+		<!-- PWA Install banner -->
+		{#if showInstallBanner && showNav}
+			<div class="fixed bottom-14 left-0 right-0 z-50 px-3 pb-2 lg:bottom-4 lg:left-auto lg:right-4 lg:w-80 lg:px-0">
+				<div class="flex items-center gap-3 rounded-xl border border-royal-200 bg-white px-4 py-3 shadow-lg">
+					<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-royal text-white">
+						<Download size={20} />
+					</div>
+					<div class="min-w-0 flex-1">
+						{#if isIOS}
+							<p class="text-sm font-medium text-gray-900">Installer LudoTools</p>
+							<p class="text-xs text-gray-500">
+								Appuie sur <Share size={12} class="inline text-royal" /> puis "Sur l'écran d'accueil"
+							</p>
+						{:else}
+							<p class="text-sm font-medium text-gray-900">Installer LudoTools</p>
+							<p class="text-xs text-gray-500">Accès rapide depuis l'écran d'accueil</p>
+						{/if}
+					</div>
+					{#if !isIOS}
+						<button
+							onclick={installApp}
+							class="shrink-0 rounded-lg bg-royal px-3 py-1.5 text-xs font-medium text-white hover:bg-royal-700"
+						>
+							Installer
+						</button>
+					{/if}
+					<button
+						onclick={dismissInstall}
+						class="shrink-0 rounded-lg p-1 text-gray-400 hover:bg-gray-100"
+					>
+						<X size={16} />
+					</button>
+				</div>
+			</div>
+		{/if}
 
 		<!-- Mobile bottom nav -->
 		{#if showNav}
