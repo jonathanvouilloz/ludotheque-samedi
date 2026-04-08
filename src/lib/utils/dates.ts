@@ -86,6 +86,53 @@ export function formatDay(isoDate: string): string {
 }
 
 /**
+ * Returns true if two inclusive date ranges (YYYY-MM-DD) overlap.
+ */
+export function dateRangeOverlap(
+	aStart: string,
+	aEnd: string,
+	bStart: string,
+	bEnd: string
+): boolean {
+	return aStart <= bEnd && bStart <= aEnd;
+}
+
+/**
+ * Returns true if two HH:MM time ranges overlap (half-open: end excluded).
+ */
+export function timeRangeOverlap(
+	aStart: string,
+	aEnd: string,
+	bStart: string,
+	bEnd: string
+): boolean {
+	return aStart < bEnd && bStart < aEnd;
+}
+
+/**
+ * Returns all ISO dates between start and end inclusive.
+ */
+export function eachDateInRange(startDate: string, endDate: string): string[] {
+	const dates: string[] = [];
+	const current = new Date(startDate + 'T00:00:00Z');
+	const end = new Date(endDate + 'T00:00:00Z');
+	while (current <= end) {
+		dates.push(current.toISOString().split('T')[0]);
+		current.setUTCDate(current.getUTCDate() + 1);
+	}
+	return dates;
+}
+
+/**
+ * Add N days to an ISO date (YYYY-MM-DD).
+ */
+export function addDays(isoDate: string, days: number): string {
+	const d = new Date(isoDate + 'T00:00:00Z');
+	d.setUTCDate(d.getUTCDate() + days);
+	return d.toISOString().split('T')[0];
+}
+
+/**
  * Returns the number of days until the given date (0 = today, negative = past)
  */
 export function daysUntil(isoDate: string): number {

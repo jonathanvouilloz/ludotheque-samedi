@@ -5,6 +5,7 @@
 	import { pwaInfo } from 'virtual:pwa-info';
 	import { identity } from '$lib/stores/identity.svelte';
 	import Calendar from 'lucide-svelte/icons/calendar';
+	import CalendarDays from 'lucide-svelte/icons/calendar-days';
 	import Gamepad2 from 'lucide-svelte/icons/gamepad-2';
 	import Package from 'lucide-svelte/icons/package';
 	import ScrollText from 'lucide-svelte/icons/scroll-text';
@@ -19,6 +20,7 @@
 
 	const tabs = [
 		{ href: '/', label: 'Planning', icon: Calendar },
+		{ href: '/calendrier', label: 'Calendrier', icon: CalendarDays },
 		{ href: '/games', label: 'Jeux', icon: Gamepad2 },
 		{ href: '/supplies', label: 'Matériel', icon: Package },
 		{ href: '/log', label: 'Log', icon: ScrollText },
@@ -26,7 +28,8 @@
 	];
 
 	let isOnIdentifyPage = $derived($page.url.pathname === '/identify');
-	let showNav = $derived(!isOnIdentifyPage);
+	let isOnPublicPage = $derived($page.url.pathname.startsWith('/p/'));
+	let showNav = $derived(!isOnIdentifyPage && !isOnPublicPage);
 
 	// PWA install prompt
 	let installPromptEvent = $state<Event | null>(null);
@@ -62,6 +65,7 @@
 		}
 
 		checkNewLogs();
+		checkPendingCalendar();
 
 		if (identity.memberId) {
 			try {
@@ -80,15 +84,42 @@
 	});
 
 	$effect(() => {
-		if (identity.initialized && !identity.memberId && !isOnIdentifyPage) {
+		if (identity.initialized && !identity.memberId && !isOnIdentifyPage && !isOnPublicPage) {
 			goto('/identify');
 		}
 	});
 
 	let webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 
+	// Wide pages use more horizontal space on desktop (calendar grid needs room)
+	let isWidePage = $derived(
+		$page.url.pathname === '/calendrier' ||
+			$page.url.pathname.startsWith('/calendrier/proposals/new') ||
+			/^\/calendrier\/proposals\/[^/]+$/.test($page.url.pathname)
+	);
+
 	// Badge: count new log entries since last visit
 	let newLogCount = $state(0);
+	let pendingCalendarCount = $state(0);
+
+	async function checkPendingCalendar() {
+		try {
+			const [absRes, propRes] = await Promise.all([
+				fetch('/api/calendar/absences'),
+				fetch('/api/calendar/proposals')
+			]);
+			let count = 0;
+			if (absRes.ok) {
+				const rows = (await absRes.json()) as { status: string }[];
+				count += rows.filter((r) => r.status === 'pending').length;
+			}
+			if (propRes.ok) {
+				const rows = (await propRes.json()) as { status: string }[];
+				count += rows.filter((r) => r.status === 'submitted').length;
+			}
+			pendingCalendarCount = count;
+		} catch {}
+	}
 
 	async function checkNewLogs() {
 		if (typeof window === 'undefined') return;
@@ -115,6 +146,12 @@
 	$effect(() => {
 		if ($page.url.pathname === '/log') {
 			newLogCount = 0;
+		}
+	});
+
+	$effect(() => {
+		if ($page.url.pathname.startsWith('/calendrier')) {
+			checkPendingCalendar();
 		}
 	});
 
@@ -175,6 +212,11 @@
 								{newLogCount > 99 ? '99+' : newLogCount}
 							</span>
 						{/if}
+						{#if tab.href === '/calendrier' && pendingCalendarCount > 0}
+							<span class="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1.5 text-[10px] font-bold text-white">
+								{pendingCalendarCount > 99 ? '99+' : pendingCalendarCount}
+							</span>
+						{/if}
 					</a>
 				{/each}
 			</nav>
@@ -215,11 +257,17 @@
 				</button>
 			</div>
 		{/if}
-		<main class="flex-1 overflow-y-auto px-4 pt-6 {showNav ? 'pb-20 lg:pb-6' : ''}">
-			<div class="mx-auto max-w-2xl">
+		{#if isOnPublicPage}
+			<main class="flex-1 overflow-y-auto">
 				{@render children()}
-			</div>
-		</main>
+			</main>
+		{:else}
+			<main class="flex-1 overflow-y-auto px-4 pt-6 {showNav ? 'pb-20 lg:pb-6' : ''} lg:px-8">
+				<div class="mx-auto {isWidePage ? 'max-w-[1600px]' : 'max-w-2xl'}">
+					{@render children()}
+				</div>
+			</main>
+		{/if}
 
 		<!-- PWA Install banner -->
 		{#if showInstallBanner && showNav}
@@ -275,6 +323,11 @@
 							{#if tab.href === '/log' && newLogCount > 0}
 								<span class="absolute top-1 right-1/4 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
 									{newLogCount > 99 ? '99+' : newLogCount}
+								</span>
+							{/if}
+							{#if tab.href === '/calendrier' && pendingCalendarCount > 0}
+								<span class="absolute top-1 right-1/4 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white">
+									{pendingCalendarCount > 99 ? '99+' : pendingCalendarCount}
 								</span>
 							{/if}
 							<span class="mt-1">{tab.label}</span>

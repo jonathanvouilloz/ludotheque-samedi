@@ -85,6 +85,6 @@ src/
 
 ## État actuel
 
-**Phase** : V1 TERMINÉE — 9/9 epics
-**Dernier epic** : Epic 9 — Polish & responsive
+**Phase** : V1.1 — 10/10 epics
+**Dernier epic** : Epic 10 — Calendrier interne (vacances membres, accueils, événements, vue unifiée)
 **Prochaine étape** : Déploiement Vercel + tests sur mobile

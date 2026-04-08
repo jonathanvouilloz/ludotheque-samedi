@@ -13,6 +13,8 @@
 | 7 | Log des modifications | S | DONE | [activity-log.md](features/activity-log.md) |
 | 8 | PWA & offline | S | DONE | [pwa.md](features/pwa.md) |
 | 9 | Polish & responsive | S | DONE | [polish.md](features/polish.md) |
+| 10 | Calendrier interne (vacances membres + événements + accueils) | XL | DONE | [calendrier.md](features/calendrier.md) |
+| 11 | Propositions partenaires (remplacement Excel) | L | DONE | [proposals.md](features/proposals.md) |
 
 ## Ordre d'exécution recommandé
 
