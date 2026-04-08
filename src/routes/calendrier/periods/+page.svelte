@@ -131,7 +131,7 @@
 				bind:value={label}
 				type="text"
 				placeholder="ex: Vacances d'octobre"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			/>
 		</div>
 		<div>
@@ -139,7 +139,7 @@
 			<select
 				id="p-type"
 				bind:value={type}
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			>
 				<option value="vacation">Vacances scolaires</option>
 				<option value="holiday">Jour férié</option>
@@ -154,7 +154,7 @@
 					id="p-start"
 					bind:value={startDate}
 					type="date"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 			<div>
@@ -163,7 +163,7 @@
 					id="p-end"
 					bind:value={endDate}
 					type="date"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 		</div>
@@ -184,7 +184,7 @@
 			</button>
 			<button
 				onclick={resetForm}
-				class="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+				class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
 			>
 				Annuler
 			</button>

@@ -75,7 +75,7 @@
 	}
 
 	async function remove(s: School) {
-		if (!confirm(`Supprimer l'école "${s.name}" ?`)) return;
+		if (!confirm(`Supprimer le partenaire "${s.name}" ?`)) return;
 		const res = await fetchJson(`/api/calendar/schools/${s.id}`, { method: 'DELETE' });
 		if (res.ok) await invalidateAll();
 		else alert(res.error);
@@ -83,13 +83,13 @@
 </script>
 
 <svelte:head>
-	<title>Écoles — LudoTools</title>
+	<title>Partenaires — LudoTools</title>
 </svelte:head>
 
 <div class="flex items-center justify-between">
 	<div class="flex items-center gap-2">
 		<a href="/calendrier" class="text-gray-400 hover:text-gray-600"><ArrowLeft size={18} /></a>
-		<h1 class="text-2xl font-bold text-royal">Écoles</h1>
+		<h1 class="text-2xl font-bold text-royal">Partenaires</h1>
 	</div>
 	<button
 		onclick={() => (showForm ? resetForm() : (showForm = true))}
@@ -108,8 +108,8 @@
 				id="s-name"
 				bind:value={name}
 				type="text"
-				placeholder="ex: École des Pâquis"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				placeholder="ex: École des Pâquis, foyer, MJC…"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			/>
 		</div>
 		<div>
@@ -118,7 +118,7 @@
 				id="s-address"
 				bind:value={address}
 				type="text"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			/>
 		</div>
 		<div class="grid gap-3 sm:grid-cols-2">
@@ -128,7 +128,7 @@
 					id="s-contact-name"
 					bind:value={contactName}
 					type="text"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 			<div>
@@ -137,7 +137,7 @@
 					id="s-contact-email"
 					bind:value={contactEmail}
 					type="email"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 		</div>
@@ -147,7 +147,7 @@
 				id="s-phone"
 				bind:value={phone}
 				type="tel"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			/>
 		</div>
 		<div>
@@ -156,7 +156,7 @@
 				id="s-notes"
 				bind:value={notes}
 				rows="2"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			></textarea>
 		</div>
 		{#if formError}
@@ -172,7 +172,7 @@
 			</button>
 			<button
 				onclick={resetForm}
-				class="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+				class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
 			>
 				Annuler
 			</button>
@@ -218,6 +218,6 @@
 			</div>
 		</div>
 	{:else}
-		<p class="py-8 text-center text-sm text-gray-400">Aucune école enregistrée</p>
+		<p class="py-8 text-center text-sm text-gray-400">Aucun partenaire enregistré</p>
 	{/each}
 </div>

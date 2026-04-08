@@ -158,7 +158,7 @@
 			{#if status === 'submitted'}
 				<div class="rounded-lg border border-amber-200 bg-amber-50 p-3">
 					<p class="text-sm font-medium text-amber-900">
-						L'école a soumis sa réponse ({filledCount} rempli·s, {declinedCount} décliné·s)
+						Le partenaire a soumis sa réponse ({filledCount} rempli·s, {declinedCount} décliné·s)
 					</p>
 					<label class="mt-2 flex items-center gap-2 text-xs text-amber-800">
 						<input
@@ -244,7 +244,7 @@
 							{#if ev.notes}<p class="italic">{ev.notes}</p>{/if}
 						</div>
 					{:else if status !== 'draft' && !ev.declined}
-						<p class="mt-2 text-xs italic text-gray-400">En attente de saisie par l'école</p>
+						<p class="mt-2 text-xs italic text-gray-400">En attente de saisie par le partenaire</p>
 					{/if}
 				</div>
 			</div>

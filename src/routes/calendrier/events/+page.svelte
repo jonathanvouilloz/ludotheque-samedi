@@ -38,13 +38,13 @@
 </script>
 
 <svelte:head>
-	<title>Événements — LudoTools</title>
+	<title>Événements internes — LudoTools</title>
 </svelte:head>
 
 <div class="flex items-center justify-between">
 	<div class="flex items-center gap-2">
 		<a href="/calendrier" class="text-gray-400 hover:text-gray-600"><ArrowLeft size={18} /></a>
-		<h1 class="text-2xl font-bold text-royal">Événements & accueils</h1>
+		<h1 class="text-2xl font-bold text-royal">Événements internes</h1>
 	</div>
 	<a
 		href="/calendrier/events/new"

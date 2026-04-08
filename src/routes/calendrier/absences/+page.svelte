@@ -159,7 +159,7 @@
 				<select
 					id="a-member"
 					bind:value={selectedMemberId}
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				>
 					{#each data.members as m}
 						<option value={m.id}>{m.name}</option>
@@ -172,7 +172,7 @@
 			<select
 				id="a-type"
 				bind:value={type}
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			>
 				<option value="vacation">Vacances</option>
 				<option value="leave">Congé</option>
@@ -187,7 +187,7 @@
 					id="a-start"
 					bind:value={startDate}
 					type="date"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 			<div>
@@ -196,7 +196,7 @@
 					id="a-end"
 					bind:value={endDate}
 					type="date"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 		</div>
@@ -217,7 +217,7 @@
 						id="a-start-time"
 						bind:value={startTime}
 						type="time"
-						class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+						class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 					/>
 				</div>
 				<div>
@@ -226,7 +226,7 @@
 						id="a-end-time"
 						bind:value={endTime}
 						type="time"
-						class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+						class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 					/>
 				</div>
 			</div>
@@ -237,7 +237,7 @@
 				id="a-note"
 				bind:value={requestNote}
 				rows="2"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			></textarea>
 		</div>
 		{#if formError}
@@ -253,7 +253,7 @@
 			</button>
 			<button
 				onclick={resetForm}
-				class="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+				class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
 			>
 				Annuler
 			</button>

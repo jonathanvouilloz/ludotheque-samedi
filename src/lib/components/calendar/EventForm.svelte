@@ -29,6 +29,7 @@
 		submitLabel?: string;
 		excludeEventId?: string;
 		allowRecurrence?: boolean;
+		lockKind?: boolean;
 		onsubmit: (payload: Record<string, unknown>) => Promise<void> | void;
 		submitting?: boolean;
 		error?: string;
@@ -41,6 +42,7 @@
 		submitLabel = 'Créer',
 		excludeEventId,
 		allowRecurrence = false,
+		lockKind = false,
 		onsubmit,
 		submitting = false,
 		error = ''
@@ -149,29 +151,31 @@
 			bind:value={title}
 			type="text"
 			placeholder="ex: Accueil classe 5P"
-			class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+			class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 		/>
 	</div>
 
-	<div>
-		<label for="e-kind" class="block text-sm font-medium text-gray-700">Type *</label>
-		<select
-			id="e-kind"
-			bind:value={kind}
-			class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
-		>
-			<option value="accueil">Accueil partenaire (école, foyer…)</option>
-			<option value="internal">Événement interne</option>
-		</select>
-	</div>
+	{#if !lockKind}
+		<div>
+			<label for="e-kind" class="block text-sm font-medium text-gray-700">Type *</label>
+			<select
+				id="e-kind"
+				bind:value={kind}
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+			>
+				<option value="accueil">Accueil partenaire</option>
+				<option value="internal">Événement interne</option>
+			</select>
+		</div>
+	{/if}
 
 	{#if kind === 'accueil'}
 		<div>
-			<label for="e-school" class="block text-sm font-medium text-gray-700">École</label>
+			<label for="e-school" class="block text-sm font-medium text-gray-700">Partenaire</label>
 			<select
 				id="e-school"
 				bind:value={schoolId}
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			>
 				<option value="">— Aucune / autre —</option>
 				{#each schools as s}
@@ -187,7 +191,7 @@
 					bind:value={classLabel}
 					type="text"
 					placeholder="ex: 5P-2"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 			<div>
@@ -197,7 +201,7 @@
 					bind:value={ageRange}
 					type="text"
 					placeholder="ex: 8-10 ans"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 			<div>
@@ -206,7 +210,7 @@
 					id="e-contact"
 					bind:value={contactName}
 					type="text"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 			<div>
@@ -215,7 +219,7 @@
 					id="e-email"
 					bind:value={contactEmail}
 					type="email"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 			<div>
@@ -225,7 +229,7 @@
 					bind:value={childCount}
 					type="number"
 					min="0"
-					class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+					class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 				/>
 			</div>
 		</div>
@@ -237,7 +241,7 @@
 			id="e-date"
 			bind:value={date}
 			type="date"
-			class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+			class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 		/>
 	</div>
 	<div class="grid gap-3 sm:grid-cols-2">
@@ -247,7 +251,7 @@
 				id="e-start"
 				bind:value={startTime}
 				type="time"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			/>
 		</div>
 		<div>
@@ -256,7 +260,7 @@
 				id="e-end"
 				bind:value={endTime}
 				type="time"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			/>
 		</div>
 	</div>
@@ -268,7 +272,7 @@
 			bind:value={location}
 			type="text"
 			placeholder="ex: Ludothèque Pâquis"
-			class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+			class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 		/>
 	</div>
 
@@ -295,7 +299,7 @@
 		<select
 			id="e-status"
 			bind:value={status}
-			class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+			class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 		>
 			<option value="draft">Brouillon</option>
 			<option value="sent">Envoyé</option>
@@ -309,7 +313,7 @@
 			id="e-notes"
 			bind:value={notes}
 			rows="2"
-			class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+			class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 		></textarea>
 	</div>
 
@@ -331,7 +335,7 @@
 						bind:value={weeks}
 						min="2"
 						max="52"
-						class="w-20 rounded-lg border border-gray-300 px-2 py-1 text-sm"
+						class="w-20 rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm"
 					/>
 				</div>
 			{/if}

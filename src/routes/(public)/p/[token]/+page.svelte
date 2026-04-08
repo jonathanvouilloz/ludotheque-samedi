@@ -198,7 +198,7 @@
 									disabled={!isEditable}
 									type="text"
 									placeholder="ex: 5P-2"
-									class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
+									class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
 								/>
 							</div>
 							<div>
@@ -210,7 +210,7 @@
 									disabled={!isEditable}
 									type="text"
 									placeholder="ex: 8-10 ans"
-									class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
+									class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
 								/>
 							</div>
 							<div>
@@ -221,7 +221,7 @@
 									onblur={() => saveField(slot, 'contactName')}
 									disabled={!isEditable}
 									type="text"
-									class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
+									class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
 								/>
 							</div>
 							<div>
@@ -232,7 +232,7 @@
 									onblur={() => saveField(slot, 'contactEmail')}
 									disabled={!isEditable}
 									type="email"
-									class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
+									class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
 								/>
 							</div>
 							<div>
@@ -244,7 +244,7 @@
 									disabled={!isEditable}
 									type="number"
 									min="0"
-									class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
+									class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
 								/>
 							</div>
 							<div class="sm:col-span-2">
@@ -255,7 +255,7 @@
 									onblur={() => saveField(slot, 'notes')}
 									disabled={!isEditable}
 									rows="2"
-									class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
+									class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none disabled:bg-gray-50"
 								></textarea>
 							</div>
 						</div>

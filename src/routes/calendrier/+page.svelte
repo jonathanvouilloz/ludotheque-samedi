@@ -117,7 +117,7 @@
 				href="/calendrier/events"
 				class="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:border-royal-200 hover:text-royal"
 			>
-				<CalendarDays size={14} /> Événements
+				<CalendarDays size={14} /> Événements internes
 			</a>
 			<a
 				href="/calendrier/proposals"
@@ -141,7 +141,7 @@
 				href="/calendrier/schools"
 				class="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:border-royal-200 hover:text-royal"
 			>
-				<School size={14} /> Écoles
+				<School size={14} /> Partenaires
 			</a>
 		</div>
 

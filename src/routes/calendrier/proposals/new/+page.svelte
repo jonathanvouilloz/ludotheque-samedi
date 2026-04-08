@@ -51,7 +51,7 @@
 
 	async function save(activate: boolean) {
 		if (!title.trim() || !schoolId || !deadline) {
-			error = 'Titre, école et deadline requis';
+			error = 'Titre, partenaire et deadline requis';
 			return;
 		}
 		if (selectedDates.size === 0) {
@@ -166,15 +166,15 @@
 				bind:value={title}
 				type="text"
 				placeholder="ex: Accueils automne 2026"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			/>
 		</div>
 		<div>
-			<label for="p-school" class="block text-sm font-medium text-gray-700">École *</label>
+			<label for="p-school" class="block text-sm font-medium text-gray-700">Partenaire *</label>
 			<select
 				id="p-school"
 				bind:value={schoolId}
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			>
 				<option value="">— Sélectionner —</option>
 				{#each data.schools as s}
@@ -188,7 +188,7 @@
 				id="p-deadline"
 				bind:value={deadline}
 				type="date"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			/>
 		</div>
 		<div>
@@ -198,7 +198,7 @@
 				bind:value={message}
 				rows="2"
 				placeholder="Bonjour, voici les créneaux…"
-				class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
+				class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-royal focus:ring-1 focus:ring-royal focus:outline-none"
 			></textarea>
 		</div>
 
@@ -213,7 +213,7 @@
 						id="p-start"
 						bind:value={startTime}
 						type="time"
-						class="mt-0.5 w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm"
+						class="mt-0.5 w-full rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-sm"
 					/>
 				</div>
 				<div>
@@ -222,7 +222,7 @@
 						id="p-end"
 						bind:value={endTime}
 						type="time"
-						class="mt-0.5 w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm"
+						class="mt-0.5 w-full rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-sm"
 					/>
 				</div>
 			</div>
@@ -232,7 +232,7 @@
 					id="p-loc"
 					bind:value={location}
 					type="text"
-					class="mt-0.5 w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm"
+					class="mt-0.5 w-full rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-sm"
 				/>
 			</div>
 			<div class="mt-2">

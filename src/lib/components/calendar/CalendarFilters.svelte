@@ -92,7 +92,7 @@
 
 	{#if schools.length > 0}
 		<div>
-			<h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500">Écoles</h3>
+			<h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500">Partenaires</h3>
 			<div class="mt-2 flex flex-wrap gap-1">
 				{#each schools as s}
 					{@const active = filters.schoolIds.has(s.id)}

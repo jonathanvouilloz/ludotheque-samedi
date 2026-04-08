@@ -95,6 +95,7 @@
 	let isWidePage = $derived(
 		$page.url.pathname === '/calendrier' ||
 			$page.url.pathname.startsWith('/calendrier/proposals/new') ||
+			$page.url.pathname.startsWith('/calendrier/events/new') ||
 			/^\/calendrier\/proposals\/[^/]+$/.test($page.url.pathname)
 	);
 
