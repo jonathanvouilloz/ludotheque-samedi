@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { ulid } from 'ulid';
 import { db } from '$lib/server/db';
 import { events, eventAssignments } from '$lib/server/schema';
-import { requireResponsable } from '$lib/server/auth';
+import { requireMember } from '$lib/server/auth';
 import { logActivity } from '$lib/server/activity';
 import type { RequestHandler } from './$types';
 
@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 export const PUT: RequestHandler = async ({ params, request, url }) => {
-	const actor = await requireResponsable(request);
+	const actor = await requireMember(request);
 	const existing = await db.select().from(events).where(eq(events.id, params.id)).limit(1);
 	if (!existing[0]) error(404, { message: 'Événement introuvable' });
 
@@ -110,7 +110,7 @@ export const PUT: RequestHandler = async ({ params, request, url }) => {
 };
 
 export const DELETE: RequestHandler = async ({ params, request, url }) => {
-	const actor = await requireResponsable(request);
+	const actor = await requireMember(request);
 	const existing = await db.select().from(events).where(eq(events.id, params.id)).limit(1);
 	if (!existing[0]) error(404, { message: 'Événement introuvable' });
 

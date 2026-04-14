@@ -3,7 +3,7 @@ import { asc } from 'drizzle-orm';
 import { ulid } from 'ulid';
 import { db } from '$lib/server/db';
 import { schools } from '$lib/server/schema';
-import { requireResponsable } from '$lib/server/auth';
+import { requireMember } from '$lib/server/auth';
 import { logActivity } from '$lib/server/activity';
 import type { RequestHandler } from './$types';
 
@@ -13,7 +13,7 @@ export const GET: RequestHandler = async () => {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await requireMember(request);
 	const body = await request.json();
 	const { name, address, contactName, contactEmail, phone, notes } = body as {
 		name?: string;

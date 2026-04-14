@@ -3,13 +3,13 @@ import { desc, eq } from 'drizzle-orm';
 import { ulid } from 'ulid';
 import { db } from '$lib/server/db';
 import { proposals, events, eventAssignments, schools } from '$lib/server/schema';
-import { requireResponsable } from '$lib/server/auth';
+import { requireMember } from '$lib/server/auth';
 import { logActivity } from '$lib/server/activity';
 import { addDays } from '$lib/utils/dates';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ request }) => {
-	await requireResponsable(request);
+	await requireMember(request);
 	const rows = await db
 		.select({
 			id: proposals.id,
@@ -39,7 +39,7 @@ interface SlotInput {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await requireMember(request);
 	const body = await request.json();
 	const { title, schoolId, deadline, message, slots } = body as {
 		title?: string;

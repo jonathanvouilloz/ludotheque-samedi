@@ -17,6 +17,20 @@ export async function getMemberFromRequest(request: Request): Promise<Member | n
 	return result[0] ?? null;
 }
 
+export async function requireMember(request: Request): Promise<Member> {
+	const member = await getMemberFromRequest(request);
+
+	if (!member) {
+		error(401, { message: 'Identification requise' });
+	}
+
+	if (!member.isActive) {
+		error(403, { message: 'Ce compte a été désactivé' });
+	}
+
+	return member;
+}
+
 export async function requireResponsable(request: Request): Promise<Member> {
 	const member = await getMemberFromRequest(request);
 

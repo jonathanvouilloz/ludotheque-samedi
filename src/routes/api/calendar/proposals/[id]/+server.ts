@@ -2,13 +2,13 @@ import { json, error } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { proposals, events } from '$lib/server/schema';
-import { requireResponsable } from '$lib/server/auth';
+import { requireMember } from '$lib/server/auth';
 import { logActivity } from '$lib/server/activity';
 import { today } from '$lib/utils/dates';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ params, request }) => {
-	await requireResponsable(request);
+	await requireMember(request);
 	const row = await db.select().from(proposals).where(eq(proposals.id, params.id)).limit(1);
 	if (!row[0]) error(404, { message: 'Proposition introuvable' });
 
@@ -27,7 +27,7 @@ export const GET: RequestHandler = async ({ params, request }) => {
 };
 
 export const PUT: RequestHandler = async ({ params, request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await requireMember(request);
 	const existing = await db.select().from(proposals).where(eq(proposals.id, params.id)).limit(1);
 	if (!existing[0]) error(404, { message: 'Proposition introuvable' });
 
@@ -60,7 +60,7 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 };
 
 export const DELETE: RequestHandler = async ({ params, request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await requireMember(request);
 	const existing = await db.select().from(proposals).where(eq(proposals.id, params.id)).limit(1);
 	if (!existing[0]) error(404, { message: 'Proposition introuvable' });
 
