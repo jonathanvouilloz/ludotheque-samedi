@@ -20,7 +20,7 @@
 
 	const tabs = [
 		{ href: '/', label: 'Planning', icon: Calendar },
-		{ href: '/calendrier', label: 'Calendrier', icon: CalendarDays },
+		{ href: '/calendrier/absences', label: 'Absences', icon: CalendarDays },
 		{ href: '/games', label: 'Jeux', icon: Gamepad2 },
 		{ href: '/supplies', label: 'Matériel', icon: Package },
 		{ href: '/log', label: 'Log', icon: ScrollText },
@@ -91,13 +91,7 @@
 
 	let webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 
-	// Wide pages use more horizontal space on desktop (calendar grid needs room)
-	let isWidePage = $derived(
-		$page.url.pathname === '/calendrier' ||
-			$page.url.pathname.startsWith('/calendrier/proposals/new') ||
-			$page.url.pathname.startsWith('/calendrier/events/new') ||
-			/^\/calendrier\/proposals\/[^/]+$/.test($page.url.pathname)
-	);
+	let isWidePage = $derived(false);
 
 	// Badge: count new log entries since last visit
 	let newLogCount = $state(0);
@@ -105,20 +99,11 @@
 
 	async function checkPendingCalendar() {
 		try {
-			const [absRes, propRes] = await Promise.all([
-				fetch('/api/calendar/absences'),
-				fetch('/api/calendar/proposals')
-			]);
-			let count = 0;
-			if (absRes.ok) {
-				const rows = (await absRes.json()) as { status: string }[];
-				count += rows.filter((r) => r.status === 'pending').length;
+			const res = await fetch('/api/calendar/absences');
+			if (res.ok) {
+				const rows = (await res.json()) as { status: string }[];
+				pendingCalendarCount = rows.filter((r) => r.status === 'pending').length;
 			}
-			if (propRes.ok) {
-				const rows = (await propRes.json()) as { status: string }[];
-				count += rows.filter((r) => r.status === 'submitted').length;
-			}
-			pendingCalendarCount = count;
 		} catch {}
 	}
 
@@ -151,7 +136,7 @@
 	});
 
 	$effect(() => {
-		if ($page.url.pathname.startsWith('/calendrier')) {
+		if ($page.url.pathname.startsWith('/calendrier/absences')) {
 			checkPendingCalendar();
 		}
 	});
@@ -213,7 +198,7 @@
 								{newLogCount > 99 ? '99+' : newLogCount}
 							</span>
 						{/if}
-						{#if tab.href === '/calendrier' && pendingCalendarCount > 0}
+						{#if tab.href === '/calendrier/absences' && pendingCalendarCount > 0}
 							<span class="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1.5 text-[10px] font-bold text-white">
 								{pendingCalendarCount > 99 ? '99+' : pendingCalendarCount}
 							</span>
@@ -326,7 +311,7 @@
 									{newLogCount > 99 ? '99+' : newLogCount}
 								</span>
 							{/if}
-							{#if tab.href === '/calendrier' && pendingCalendarCount > 0}
+							{#if tab.href === '/calendrier/absences' && pendingCalendarCount > 0}
 								<span class="absolute top-1 right-1/4 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white">
 									{pendingCalendarCount > 99 ? '99+' : pendingCalendarCount}
 								</span>

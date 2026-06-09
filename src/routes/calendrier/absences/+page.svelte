@@ -6,7 +6,6 @@
 	import Check from 'lucide-svelte/icons/check';
 	import X from 'lucide-svelte/icons/x';
 	import Trash2 from 'lucide-svelte/icons/trash-2';
-	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
 	import type { AbsenceStatus, AbsenceType } from '$lib/server/schema';
 	import { formatDay } from '$lib/utils/dates';
 
@@ -139,7 +138,6 @@
 
 <div class="flex items-center justify-between">
 	<div class="flex items-center gap-2">
-		<a href="/calendrier" class="text-gray-400 hover:text-gray-600"><ArrowLeft size={18} /></a>
 		<h1 class="text-2xl font-bold text-royal">Absences</h1>
 	</div>
 	<button
