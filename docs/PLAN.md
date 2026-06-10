@@ -15,6 +15,7 @@
 | 9 | Polish & responsive | S | DONE | [polish.md](features/polish.md) |
 | 10 | Calendrier interne (vacances membres + événements + accueils) | XL | DONE | [calendrier.md](features/calendrier.md) |
 | 11 | Propositions partenaires (remplacement Excel) | L | DONE | [proposals.md](features/proposals.md) |
+| 12 | Thèmes & check-ups espace animation | L | DONE | [themes.md](features/themes.md) |
 
 ## Ordre d'exécution recommandé
 
