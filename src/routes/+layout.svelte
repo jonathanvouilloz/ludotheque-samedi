@@ -8,6 +8,7 @@
 	import CalendarDays from 'lucide-svelte/icons/calendar-days';
 	import Gamepad2 from 'lucide-svelte/icons/gamepad-2';
 	import Package from 'lucide-svelte/icons/package';
+	import Boxes from 'lucide-svelte/icons/boxes';
 	import ScrollText from 'lucide-svelte/icons/scroll-text';
 	import Settings from 'lucide-svelte/icons/settings';
 	import LogOut from 'lucide-svelte/icons/log-out';
@@ -23,6 +24,7 @@
 		{ href: '/calendrier/absences', label: 'Absences', icon: CalendarDays },
 		{ href: '/games', label: 'Jeux', icon: Gamepad2 },
 		{ href: '/supplies', label: 'Matériel', icon: Package },
+		{ href: '/themes', label: 'Thèmes', icon: Boxes },
 		{ href: '/log', label: 'Log', icon: ScrollText },
 		{ href: '/settings', label: 'Réglages', icon: Settings }
 	];
@@ -66,6 +68,7 @@
 
 		checkNewLogs();
 		checkPendingCalendar();
+		checkThemeProblems();
 
 		if (identity.memberId) {
 			try {
@@ -96,6 +99,7 @@
 	// Badge: count new log entries since last visit
 	let newLogCount = $state(0);
 	let pendingCalendarCount = $state(0);
+	let themeProblemsCount = $state(0);
 
 	async function checkPendingCalendar() {
 		try {
@@ -103,6 +107,27 @@
 			if (res.ok) {
 				const rows = (await res.json()) as { status: string }[];
 				pendingCalendarCount = rows.filter((r) => r.status === 'pending').length;
+			}
+		} catch {}
+	}
+
+	async function checkThemeProblems() {
+		try {
+			const res = await fetch('/api/themes/periods/active');
+			if (res.ok) {
+				const data = await res.json();
+				if (!data || !data.checkups) return;
+				const lastCompleted = data.checkups.find((c: { completedAt: string | null }) => c.completedAt);
+				if (!lastCompleted) return;
+				const entriesRes = await fetch(`/api/themes/checkups/${lastCompleted.id}`);
+				if (entriesRes.ok) {
+					const { entries } = await entriesRes.json();
+					themeProblemsCount = (entries as { status: string; resolvedAt: string | null }[]).filter(
+						(e) =>
+							(e.status === 'broken' || e.status === 'missing' || e.status === 'needs_more') &&
+							!e.resolvedAt
+					).length;
+				}
 			}
 		} catch {}
 	}
@@ -138,6 +163,12 @@
 	$effect(() => {
 		if ($page.url.pathname.startsWith('/calendrier/absences')) {
 			checkPendingCalendar();
+		}
+	});
+
+	$effect(() => {
+		if ($page.url.pathname.startsWith('/themes')) {
+			checkThemeProblems();
 		}
 	});
 
@@ -201,6 +232,11 @@
 						{#if tab.href === '/calendrier/absences' && pendingCalendarCount > 0}
 							<span class="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1.5 text-[10px] font-bold text-white">
 								{pendingCalendarCount > 99 ? '99+' : pendingCalendarCount}
+							</span>
+						{/if}
+						{#if tab.href === '/themes' && themeProblemsCount > 0}
+							<span class="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-500 px-1.5 text-[10px] font-bold text-white">
+								{themeProblemsCount > 99 ? '99+' : themeProblemsCount}
 							</span>
 						{/if}
 					</a>
@@ -314,6 +350,11 @@
 							{#if tab.href === '/calendrier/absences' && pendingCalendarCount > 0}
 								<span class="absolute top-1 right-1/4 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white">
 									{pendingCalendarCount > 99 ? '99+' : pendingCalendarCount}
+								</span>
+							{/if}
+							{#if tab.href === '/themes' && themeProblemsCount > 0}
+								<span class="absolute top-1 right-1/4 flex h-4 min-w-4 items-center justify-center rounded-full bg-orange-500 px-1 text-[10px] font-bold text-white">
+									{themeProblemsCount > 99 ? '99+' : themeProblemsCount}
 								</span>
 							{/if}
 							<span class="mt-1">{tab.label}</span>

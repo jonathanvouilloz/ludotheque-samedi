@@ -14,3 +14,4 @@
 | 2026-03-24 | Melt UI Next Gen (package `melt`) | Version Svelte 5 runes-first, meilleure DX | `@melt-ui/svelte` (legacy Svelte 4) |
 | 2026-03-24 | better-sqlite3 pour drizzle-kit local | `@libsql/client` a des problèmes de bindings natifs Windows (npm bug #4828) | `@libsql/client` seul (échoue sur Win) |
 | 2026-03-24 | drizzle.config: dialect sqlite en local, turso en prod | Contourne le problème d'authToken requis par le dialect turso en dev | Dialect turso partout (échoue sans token) |
+| 2026-06-10 | Supprimer events, écoles, périodes scolaires, propositions — garder uniquement les absences membres | Le système calendrier complet était trop large pour le besoin réel de la ludo ; seule la gestion des congés/absences est utile | Garder le tout (surcharge inutile) |

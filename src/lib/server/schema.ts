@@ -110,6 +110,71 @@ export const absences = sqliteTable('absences', {
 		.default(sql`(CURRENT_TIMESTAMP)`)
 });
 
+// ── Themes ───────────────────────────────────────────────────────────
+export const themes = sqliteTable('themes', {
+	id: text('id').primaryKey(),
+	name: text('name').notNull().unique(),
+	createdAt: text('created_at')
+		.notNull()
+		.default(sql`(CURRENT_TIMESTAMP)`)
+});
+
+// ── Theme Items ──────────────────────────────────────────────────────
+export const themeItems = sqliteTable('theme_items', {
+	id: text('id').primaryKey(),
+	themeId: text('theme_id')
+		.notNull()
+		.references(() => themes.id),
+	name: text('name').notNull(),
+	quantity: integer('quantity').notNull().default(1),
+	isArchived: integer('is_archived', { mode: 'boolean' }).notNull().default(false),
+	createdAt: text('created_at')
+		.notNull()
+		.default(sql`(CURRENT_TIMESTAMP)`)
+});
+
+// ── Theme Periods ────────────────────────────────────────────────────
+export const themePeriods = sqliteTable('theme_periods', {
+	id: text('id').primaryKey(),
+	themeId: text('theme_id')
+		.notNull()
+		.references(() => themes.id),
+	startedBy: text('started_by').references(() => members.id),
+	closedAt: text('closed_at'), // null = période active
+	createdAt: text('created_at')
+		.notNull()
+		.default(sql`(CURRENT_TIMESTAMP)`)
+});
+
+// ── Checkups ─────────────────────────────────────────────────────────
+export const checkups = sqliteTable('checkups', {
+	id: text('id').primaryKey(),
+	themePeriodId: text('theme_period_id')
+		.notNull()
+		.references(() => themePeriods.id),
+	doneBy: text('done_by').references(() => members.id),
+	note: text('note'),
+	completedAt: text('completed_at'), // null = en cours
+	createdAt: text('created_at')
+		.notNull()
+		.default(sql`(CURRENT_TIMESTAMP)`)
+});
+
+// ── Checkup Entries ──────────────────────────────────────────────────
+export const checkupEntries = sqliteTable('checkup_entries', {
+	id: text('id').primaryKey(),
+	checkupId: text('checkup_id')
+		.notNull()
+		.references(() => checkups.id),
+	themeItemId: text('theme_item_id').references(() => themeItems.id), // null si suggestion
+	status: text('status').notNull(), // 'present' | 'broken' | 'missing' | 'needs_more' | 'suggestion'
+	suggestedName: text('suggested_name'), // non-null si status='suggestion'
+	note: text('note'),
+	resolvedAt: text('resolved_at'),
+	resolvedBy: text('resolved_by').references(() => members.id),
+	resolutionType: text('resolution_type') // 'repaired' | 'replaced' | 'found'
+});
+
 // ── Activity Log ─────────────────────────────────────────────────────
 export const activityLog = sqliteTable('activity_log', {
 	id: text('id').primaryKey(),
@@ -141,3 +206,15 @@ export type Absence = typeof absences.$inferSelect;
 export type InsertAbsence = typeof absences.$inferInsert;
 export type AbsenceType = 'vacation' | 'leave' | 'training' | 'unavailable';
 export type AbsenceStatus = 'pending' | 'approved' | 'rejected';
+export type Theme = typeof themes.$inferSelect;
+export type InsertTheme = typeof themes.$inferInsert;
+export type ThemeItem = typeof themeItems.$inferSelect;
+export type InsertThemeItem = typeof themeItems.$inferInsert;
+export type ThemePeriod = typeof themePeriods.$inferSelect;
+export type InsertThemePeriod = typeof themePeriods.$inferInsert;
+export type Checkup = typeof checkups.$inferSelect;
+export type InsertCheckup = typeof checkups.$inferInsert;
+export type CheckupEntry = typeof checkupEntries.$inferSelect;
+export type InsertCheckupEntry = typeof checkupEntries.$inferInsert;
+export type CheckupEntryStatus = 'present' | 'broken' | 'missing' | 'needs_more' | 'suggestion';
+export type ResolutionType = 'repaired' | 'replaced' | 'found';

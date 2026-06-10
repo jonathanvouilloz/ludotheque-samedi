@@ -38,5 +38,8 @@
 		"lucide-svelte": "^1.0.1",
 		"melt": "^0.44.0",
 		"ulid": "^3.0.2"
+	},
+	"optionalDependencies": {
+		"lightningcss-win32-x64-msvc": "^1.29.3"
 	}
 }
