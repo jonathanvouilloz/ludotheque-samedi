@@ -3,7 +3,7 @@ import { asc, eq } from 'drizzle-orm';
 import { ulid } from 'ulid';
 import { db } from '$lib/server/db';
 import { themes, themeItems } from '$lib/server/schema';
-import { requireResponsable } from '$lib/server/auth';
+import { getMemberFromRequest } from '$lib/server/auth';
 import { logActivity } from '$lib/server/activity';
 import type { RequestHandler } from './$types';
 
@@ -21,7 +21,8 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 export const POST: RequestHandler = async ({ params, request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await getMemberFromRequest(request);
+	if (!actor) error(401, { message: 'Identification requise' });
 
 	const theme = await db.select().from(themes).where(eq(themes.id, params.id)).limit(1);
 	if (!theme[0]) error(404, { message: 'Thème introuvable' });

@@ -2,12 +2,13 @@ import { json, error } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { themes, themeItems } from '$lib/server/schema';
-import { requireResponsable } from '$lib/server/auth';
+import { getMemberFromRequest } from '$lib/server/auth';
 import { logActivity } from '$lib/server/activity';
 import type { RequestHandler } from './$types';
 
 export const PUT: RequestHandler = async ({ params, request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await getMemberFromRequest(request);
+	if (!actor) error(401, { message: 'Identification requise' });
 
 	const item = await db
 		.select()
@@ -43,7 +44,8 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 };
 
 export const DELETE: RequestHandler = async ({ params, request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await getMemberFromRequest(request);
+	if (!actor) error(401, { message: 'Identification requise' });
 
 	const item = await db
 		.select()

@@ -3,12 +3,13 @@ import { eq, isNull } from 'drizzle-orm';
 import { ulid } from 'ulid';
 import { db } from '$lib/server/db';
 import { themes, themePeriods } from '$lib/server/schema';
-import { requireResponsable } from '$lib/server/auth';
+import { getMemberFromRequest } from '$lib/server/auth';
 import { logActivity } from '$lib/server/activity';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await getMemberFromRequest(request);
+	if (!actor) error(401, { message: 'Identification requise' });
 
 	const body = await request.json();
 	const themeId = typeof body.themeId === 'string' ? body.themeId.trim() : '';

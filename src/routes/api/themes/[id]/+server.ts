@@ -2,7 +2,7 @@ import { json, error } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { themes, themePeriods } from '$lib/server/schema';
-import { requireResponsable } from '$lib/server/auth';
+import { getMemberFromRequest } from '$lib/server/auth';
 import { logActivity } from '$lib/server/activity';
 import type { RequestHandler } from './$types';
 
@@ -13,7 +13,8 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 export const PUT: RequestHandler = async ({ params, request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await getMemberFromRequest(request);
+	if (!actor) error(401, { message: 'Identification requise' });
 
 	const existing = await db.select().from(themes).where(eq(themes.id, params.id)).limit(1);
 	if (!existing[0]) error(404, { message: 'Thème introuvable' });
@@ -35,7 +36,8 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 };
 
 export const DELETE: RequestHandler = async ({ params, request }) => {
-	const actor = await requireResponsable(request);
+	const actor = await getMemberFromRequest(request);
+	if (!actor) error(401, { message: 'Identification requise' });
 
 	const existing = await db.select().from(themes).where(eq(themes.id, params.id)).limit(1);
 	if (!existing[0]) error(404, { message: 'Thème introuvable' });
